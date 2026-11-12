@@ -35,6 +35,8 @@ The first run builds the dependency cache and takes about 10-15 minutes, later r
 | `最小窗口高度（像素）`                                                   | Smallest height the window can shrink to                               | empty          |
 | `应用版本`                                                               | Version written into the package                                       | `1.0.0`        |
 | `Windows 安装包语言（仅 Windows 生效）`                                  | Installer language for the MSI                                         | `zh-CN`        |
+| `构建成功后发布到 GitHub Releases`                                       | Publish the installer as a GitHub Release                              | on             |
+| `Release 标签（留空自动生成）`                                           | Release tag; defaults to `v<version>-<run number>`                     | empty          |
 | `启动时进入全屏模式`                                                     | Open the app in fullscreen                                             | off            |
 | `隐藏标题栏（仅 macOS）`                                                 | Hide the window title bar                                              | off            |
 | `允许网站打开新窗口`                                                     | Let the site open pop-up windows                                       | off            |
@@ -45,10 +47,15 @@ The first run builds the dependency cache and takes about 10-15 minutes, later r
 
 Each run uploads the package as an artifact named after the app: `<name>-macOS` holds the `.dmg`, `<name>-Windows` the `.msi`, and Linux gets one artifact per format, `<name>-Linux-deb`, `<name>-Linux-AppImage`, `<name>-Linux-rpm` and `<name>-Linux-zst`. Artifacts are kept for 3 days, so download them soon after the build. Instead of the `Artifacts` section, you can also fetch them with the GitHub CLI: `gh run download RUN_ID`.
 
+## Releases
+
+When `构建成功后发布到 GitHub Releases` is enabled, the workflow creates or updates a GitHub Release for the repository and uploads the generated installer. Leave `Release 标签（留空自动生成）` empty to use `v<version>-<run number>`, or enter a stable tag such as `v1.0.0` to replace that release's installer on later runs.
+
 ## Tips
 
 - Enable `允许网站打开新窗口` when the site launches sign-in, exam, or other flows in a separate window
 - Use `zh-CN` for the Windows installer language when the app name contains Chinese characters
+- Disable `构建成功后发布到 GitHub Releases` if you only want an Actions artifact
 - If a build fails, clear the Actions cache and retry
 
 ## Related Docs

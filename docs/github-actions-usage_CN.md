@@ -35,6 +35,8 @@
 | `最小窗口高度（像素）`                                                   | 窗口能缩到的最小高度                                              | 空             |
 | `应用版本`                                                               | 写入安装包的版本号                                                | `1.0.0`        |
 | `Windows 安装包语言（仅 Windows 生效）`                                  | MSI 安装包语言，中文应用名请选择 `zh-CN`                          | `zh-CN`        |
+| `构建成功后发布到 GitHub Releases`                                       | 构建成功后自动发布安装包                                          | 开             |
+| `Release 标签（留空自动生成）`                                           | Release 标签，留空使用 `v<版本>-<运行编号>`                       | 空             |
 | `启动时进入全屏模式`                                                     | 以全屏模式启动                                                    | 关             |
 | `隐藏标题栏（仅 macOS）`                                                 | 隐藏窗口标题栏                                                    | 关             |
 | `允许网站打开新窗口`                                                     | 允许网站弹出新窗口                                                | 关             |
@@ -45,10 +47,15 @@
 
 每次运行会把安装包按应用名上传为 Artifact，`<name>-macOS` 里是 `.dmg`，`<name>-Windows` 里是 `.msi`，Linux 每种格式各一个，分别是 `<name>-Linux-deb`、`<name>-Linux-AppImage`、`<name>-Linux-rpm` 和 `<name>-Linux-zst`。产物只保留 3 天，构建完尽快下载，除了在 `Artifacts` 部分下载，也可以用 GitHub CLI 执行 `gh run download RUN_ID` 拿到。
 
+## Releases
+
+启用 `构建成功后发布到 GitHub Releases` 后，工作流会在当前仓库创建或更新 Release，并上传本次生成的安装包。`Release 标签（留空自动生成）` 留空时使用 `v<版本>-<运行编号>`；填写固定标签（例如 `v1.0.0`）时，后续运行会替换该 Release 的安装包。
+
 ## 提示
 
 - 当网站通过新窗口打开登录、考试或其他流程时，启用 `允许网站打开新窗口`
 - Windows 构建使用中文应用名称时，安装包语言请选择 `zh-CN`
+- 只需要 Actions Artifact 时，可以关闭 `构建成功后发布到 GitHub Releases`
 - 如果构建失败，清理 Actions 缓存后重试
 
 ## 相关文档

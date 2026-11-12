@@ -51,6 +51,14 @@ on:
         options:
           - "zh-CN"
           - "en-US"
+      publish_release:
+        description: "构建成功后发布到 GitHub Releases"
+        required: false
+        type: boolean
+        default: true
+      release_tag:
+        description: "Release 标签（留空自动生成）"
+        required: false
       fullscreen:
         description: "启动时进入全屏模式"
         required: false
@@ -303,3 +311,47 @@ jobs:
           path: ${{ inputs.name }}.msi
           retention-days: 3
           if-no-files-found: error
+
+  release:
+    name: 发布到 GitHub Releases
+    needs: build
+    if: inputs.publish_release == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 下载构建产物
+        uses: actions/download-artifact@v7
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: 创建或更新 Release
+        shell: bash
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_NAME: ${{ inputs.name }}
+          APP_VERSION: ${{ inputs.app_version }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          tag="${RELEASE_TAG:-v${APP_VERSION}-${GITHUB_RUN_NUMBER}}"
+          mapfile -t assets < <(find release-assets -type f -print)
+
+          if [ "${#assets[@]}" -eq 0 ]; then
+            echo "No release assets were downloaded." >&2
+            exit 1
+          fi
+
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "${assets[@]}" --clobber
+            gh release edit "$tag" --title "$APP_NAME v$APP_VERSION" --latest
+          else
+            gh release create "$tag" "${assets[@]}" \
+              --title "$APP_NAME v$APP_VERSION" \
+              --notes "自动构建自 GitHub Actions：${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+              --latest
+          fi

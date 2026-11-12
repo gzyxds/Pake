@@ -158,6 +158,21 @@ describe("Workflow path integration", () => {
       expect(workflow).toContain("if-no-files-found: error");
     });
 
+    it("should publish built packages to GitHub Releases", () => {
+      const workflow = fs.readFileSync(
+        ".github/workflows/pake-cli.yaml",
+        "utf8",
+      );
+
+      expect(workflow).toContain("publish_release:");
+      expect(workflow).toContain("release_tag:");
+      expect(workflow).toContain("actions/download-artifact@v7");
+      expect(workflow).toContain('gh release create "$tag"');
+      expect(workflow).toContain('gh release upload "$tag"');
+      expect(workflow).toContain("--clobber");
+      expect(workflow).toContain("--latest");
+    });
+
     it.each([
       ".github/workflows/pake-cli.yaml",
       ".github/workflows/single-app.yaml",
