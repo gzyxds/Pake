@@ -9,7 +9,7 @@ Layers, earliest first:
 - `write-time`: the author's own check before committing, a sweep of same-shape sites.
 - `unit`: `npx vitest run` and `cargo test --lib`.
 - `cli-build`: `pnpm run cli:build` (Rollup plus the TypeScript check).
-- `ci`: the Quality & Testing workflow (`Run Fast Test Suite`, `Rust Code Quality`, `Full Tauri Build`, Docker packaging).
+- `ci`: the 质量检查与测试 workflow (`Run Fast Test Suite`, `Rust Code Quality`, `Full Tauri Build`, Docker packaging).
 - `review`: a diff review against the Review Hard Stops in `AGENTS.md` and the risk areas in `.claude/rules/`.
 - `release-check`: `pnpm run release:check` and the release workflows before a tag.
 - `native`: a real build run on the affected OS or WebView (the `tests/integration` and `tests/browser` probes, a bundled app).

@@ -1,0 +1,61 @@
+name: 同步上游仓库
+
+on:
+    schedule:
+        - cron: "17 1 * * 1" # Every Monday at 09:17 Asia/Shanghai
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+concurrency:
+    group: sync-upstream-main
+    cancel-in-progress: false
+
+jobs:
+    sync:
+        name: Sync main from tw93/Pake
+        if: github.repository == 'gzyxds/Pake'
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout main
+              uses: actions/checkout@v6
+              with:
+                  ref: main
+                  fetch-depth: 0
+
+            - name: Configure Git
+              shell: bash
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git remote add upstream https://github.com/tw93/Pake.git
+
+            - name: Merge upstream changes
+              shell: bash
+              run: |
+                  set -euo pipefail
+
+                  git fetch --no-tags upstream main
+
+                  if git merge-base --is-ancestor upstream/main HEAD; then
+                      echo "Fork main is already synchronized with tw93/Pake."
+                      exit 0
+                  fi
+
+                  if git merge-base --is-ancestor HEAD upstream/main; then
+                      git merge --ff-only upstream/main
+                  else
+                      git merge --no-edit upstream/main
+                  fi
+
+                  git push origin HEAD:main
+
+            - name: Sync upstream tags
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  git fetch --force --tags upstream
+                  git push origin --tags

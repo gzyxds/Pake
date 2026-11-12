@@ -1,4 +1,4 @@
-name: Quality & Testing
+name: 质量检查与测试
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Build Single Popular App
+name: 构建单个热门应用
 
 env:
   NODE_VERSION: "22"

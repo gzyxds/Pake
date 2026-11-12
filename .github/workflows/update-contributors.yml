@@ -1,4 +1,4 @@
-name: Update Contributors
+name: 更新贡献者列表
 
 on:
   push:
