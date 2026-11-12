@@ -64,7 +64,7 @@ on:
         type: boolean
         default: false
       targets:
-        description: "安装包格式（用逗号分隔：deb、appimage、rpm、zst）"
+        description: "Linux 安装包格式（仅 Linux 生效，用逗号分隔：deb、appimage、rpm、zst）"
         required: false
         default: "deb"
 

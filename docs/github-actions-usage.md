@@ -23,22 +23,22 @@ The first run builds the dependency cache and takes about 10-15 minutes, later r
 
 ## Form Inputs
 
-| Field                                               | What it does                                                           | Default        |
-| --------------------------------------------------- | ---------------------------------------------------------------------- | -------------- |
-| `构建平台`                                          | Runner to build on: `windows-latest`, `macos-latest` or `ubuntu-24.04` | `macos-latest` |
-| `网站地址`                                          | The site to package, required                                          | none           |
-| `应用名称（Linux 下使用小写）`                      | App name and artifact prefix, required                                 | none           |
-| `图标地址（留空则自动获取）`                        | Icon for the app, fetched from the site when empty                     | empty          |
-| `窗口宽度（像素）`                                  | Initial window width                                                   | `1200`         |
-| `窗口高度（像素）`                                  | Initial window height                                                  | `780`          |
-| `最小窗口宽度（像素）`                              | Smallest width the window can shrink to                                | empty          |
-| `最小窗口高度（像素）`                              | Smallest height the window can shrink to                               | empty          |
-| `应用版本`                                          | Version written into the package                                       | `1.0.0`        |
-| `启动时进入全屏模式`                                | Open the app in fullscreen                                             | off            |
-| `隐藏标题栏（仅 macOS）`                            | Hide the window title bar                                              | off            |
-| `允许网站打开新窗口`                                | Let the site open pop-up windows                                       | off            |
-| `通用二进制（仅 macOS）`                            | Build one app for Intel and Apple Silicon                              | off            |
-| `安装包格式（用逗号分隔：deb、appimage、rpm、zst）` | Linux package formats, ignored on other platforms                      | `deb`          |
+| Field                                                                    | What it does                                                           | Default        |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------- | -------------- |
+| `构建平台`                                                               | Runner to build on: `windows-latest`, `macos-latest` or `ubuntu-24.04` | `macos-latest` |
+| `网站地址`                                                               | The site to package, required                                          | none           |
+| `应用名称（Linux 下使用小写）`                                           | App name and artifact prefix, required                                 | none           |
+| `图标地址（留空则自动获取）`                                             | Icon for the app, fetched from the site when empty                     | empty          |
+| `窗口宽度（像素）`                                                       | Initial window width                                                   | `1200`         |
+| `窗口高度（像素）`                                                       | Initial window height                                                  | `780`          |
+| `最小窗口宽度（像素）`                                                   | Smallest width the window can shrink to                                | empty          |
+| `最小窗口高度（像素）`                                                   | Smallest height the window can shrink to                               | empty          |
+| `应用版本`                                                               | Version written into the package                                       | `1.0.0`        |
+| `启动时进入全屏模式`                                                     | Open the app in fullscreen                                             | off            |
+| `隐藏标题栏（仅 macOS）`                                                 | Hide the window title bar                                              | off            |
+| `允许网站打开新窗口`                                                     | Let the site open pop-up windows                                       | off            |
+| `通用二进制（仅 macOS）`                                                 | Build one app for Intel and Apple Silicon                              | off            |
+| `Linux 安装包格式（仅 Linux 生效，用逗号分隔：deb、appimage、rpm、zst）` | Linux package formats, ignored on other platforms                      | `deb`          |
 
 ## Artifacts
 
