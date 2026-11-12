@@ -34,6 +34,7 @@ The first run builds the dependency cache and takes about 10-15 minutes, later r
 | `最小窗口宽度（像素）`                                                   | Smallest width the window can shrink to                                | empty          |
 | `最小窗口高度（像素）`                                                   | Smallest height the window can shrink to                               | empty          |
 | `应用版本`                                                               | Version written into the package                                       | `1.0.0`        |
+| `Windows 安装包语言（仅 Windows 生效）`                                  | Installer language for the MSI                                         | `zh-CN`        |
 | `启动时进入全屏模式`                                                     | Open the app in fullscreen                                             | off            |
 | `隐藏标题栏（仅 macOS）`                                                 | Hide the window title bar                                              | off            |
 | `允许网站打开新窗口`                                                     | Let the site open pop-up windows                                       | off            |
@@ -47,6 +48,7 @@ Each run uploads the package as an artifact named after the app: `<name>-macOS` 
 ## Tips
 
 - Enable `允许网站打开新窗口` when the site launches sign-in, exam, or other flows in a separate window
+- Use `zh-CN` for the Windows installer language when the app name contains Chinese characters
 - If a build fails, clear the Actions cache and retry
 
 ## Related Docs

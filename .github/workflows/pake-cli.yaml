@@ -43,6 +43,14 @@ on:
         description: "应用版本"
         required: false
         default: "1.0.0"
+      installer_language:
+        description: "Windows 安装包语言（仅 Windows 生效）"
+        required: false
+        type: choice
+        default: "zh-CN"
+        options:
+          - "zh-CN"
+          - "en-US"
       fullscreen:
         description: "启动时进入全屏模式"
         required: false
@@ -110,6 +118,7 @@ jobs:
           INPUT_MIN_WIDTH: ${{ inputs.min_width }}
           INPUT_MIN_HEIGHT: ${{ inputs.min_height }}
           INPUT_APP_VERSION: ${{ inputs.app_version }}
+          INPUT_INSTALLER_LANGUAGE: ${{ inputs.installer_language }}
           INPUT_FULLSCREEN: ${{ inputs.fullscreen }}
           INPUT_HIDE_TITLE_BAR: ${{ inputs.hide_title_bar }}
           INPUT_NEW_WINDOW: ${{ inputs.new_window }}
@@ -213,6 +222,10 @@ jobs:
             $args += "--app-version", $env:INPUT_APP_VERSION
           }
 
+          if (-not [string]::IsNullOrEmpty($env:INPUT_INSTALLER_LANGUAGE)) {
+            $args += "--installer-language", $env:INPUT_INSTALLER_LANGUAGE
+          }
+
           if ($env:INPUT_FULLSCREEN -eq "true") {
             $args += "--fullscreen"
           }
@@ -227,8 +240,12 @@ jobs:
 
           Write-Host "Running: node dist/cli.js $($args -join ' ')"
           node dist/cli.js $args
+          $buildExitCode = $LASTEXITCODE
 
           git checkout -- src-tauri/Cargo.lock
+          if ($buildExitCode -ne 0) {
+            exit $buildExitCode
+          }
 
       - name: 上传 DMG（macOS）
         if: runner.os == 'macOS'
@@ -282,3 +299,4 @@ jobs:
           name: ${{ inputs.name }}-Windows
           path: ${{ inputs.name }}.msi
           retention-days: 3
+          if-no-files-found: error

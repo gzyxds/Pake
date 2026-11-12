@@ -129,10 +129,10 @@ describe("Workflow path integration", () => {
         "utf8",
       );
 
-      expect(workflow).toContain("Upload DEB (Linux)");
-      expect(workflow).toContain("Upload AppImage (Linux)");
-      expect(workflow).toContain("Upload RPM (Linux)");
-      expect(workflow).toContain("Upload ZST (Linux)");
+      expect(workflow).toContain("上传 DEB（Linux）");
+      expect(workflow).toContain("上传 AppImage（Linux）");
+      expect(workflow).toContain("上传 RPM（Linux）");
+      expect(workflow).toContain("上传 ZST（Linux）");
       // The CLI lowercases and hyphenates Linux names, so uploads must not
       // assume the package is named after the raw name input.
       for (const ext of ["deb", "AppImage", "rpm", "pkg.tar.zst"]) {
@@ -141,6 +141,20 @@ describe("Workflow path integration", () => {
       expect(workflow).not.toMatch(
         /path: \$\{\{ inputs\.name \}\}\.(deb|AppImage|rpm)/,
       );
+    });
+
+    it("should preserve Windows build failures and require an MSI artifact", () => {
+      const workflow = fs.readFileSync(
+        ".github/workflows/pake-cli.yaml",
+        "utf8",
+      );
+
+      expect(workflow).toContain("$buildExitCode = $LASTEXITCODE");
+      expect(workflow).toContain("exit $buildExitCode");
+      expect(workflow).toContain(
+        '$args += "--installer-language", $env:INPUT_INSTALLER_LANGUAGE',
+      );
+      expect(workflow).toContain("if-no-files-found: error");
     });
 
     it.each([
