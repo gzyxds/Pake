@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       platform:
-        description: "Platform"
+        description: "构建平台"
         required: true
         default: "macos-latest"
         type: choice
@@ -17,54 +17,54 @@ on:
           - "macos-latest"
           - "ubuntu-24.04"
       url:
-        description: "Website URL"
+        description: "网站地址"
         required: true
       name:
-        description: "App name (lowercase for Linux)"
+        description: "应用名称（Linux 下使用小写）"
         required: true
       icon:
-        description: "Icon URL, auto-fetch if empty"
+        description: "图标地址（留空则自动获取）"
         required: false
       width:
-        description: "Window width (px)"
+        description: "窗口宽度（像素）"
         required: false
         default: "1200"
       height:
-        description: "Window height (px)"
+        description: "窗口高度（像素）"
         required: false
         default: "780"
       min_width:
-        description: "Minimum window width (px)"
+        description: "最小窗口宽度（像素）"
         required: false
       min_height:
-        description: "Minimum window height (px)"
+        description: "最小窗口高度（像素）"
         required: false
       app_version:
-        description: "App version"
+        description: "应用版本"
         required: false
         default: "1.0.0"
       fullscreen:
-        description: "Start in fullscreen mode"
+        description: "启动时进入全屏模式"
         required: false
         type: boolean
         default: false
       hide_title_bar:
-        description: "Hide title bar (macOS only)"
+        description: "隐藏标题栏（仅 macOS）"
         required: false
         type: boolean
         default: false
       new_window:
-        description: "Allow sites to open new windows"
+        description: "允许网站打开新窗口"
         required: false
         type: boolean
         default: false
       multi_arch:
-        description: "Universal binary (macOS only)"
+        description: "通用二进制（仅 macOS）"
         required: false
         type: boolean
         default: false
       targets:
-        description: "Package formats (comma-separated: deb,appimage,rpm,zst)"
+        description: "安装包格式（用逗号分隔：deb、appimage、rpm、zst）"
         required: false
         default: "deb"
 
@@ -74,30 +74,30 @@ permissions:
 
 jobs:
   build:
-    name: ${{ inputs.platform }}
+    name: 构建平台：${{ inputs.platform }}
     runs-on: ${{ inputs.platform }}
     strategy:
       fail-fast: false
 
     steps:
-      - name: Checkout repository
+      - name: 检出仓库
         uses: actions/checkout@v6
         with:
           persist-credentials: false
 
-      - name: Setup Node.js Environment
+      - name: 配置 Node.js 环境
         uses: ./.github/actions/setup-env
         with:
           mode: build
 
-      - name: Build CLI
+      - name: 构建 CLI
         run: pnpm run cli:build
 
-      - name: Setup mold linker
+      - name: 配置 mold 链接器
         if: runner.os == 'Linux'
         uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
 
-      - name: Build App (Linux/macOS)
+      - name: 构建应用（Linux/macOS）
         if: runner.os != 'Windows'
         timeout-minutes: 25
         shell: bash
@@ -167,7 +167,7 @@ jobs:
           printf '\n'
           node dist/cli.js "${ARGS[@]}"
 
-      - name: Build App (Windows)
+      - name: 构建应用（Windows）
         if: runner.os == 'Windows'
         timeout-minutes: 25
         shell: pwsh
@@ -230,7 +230,7 @@ jobs:
 
           git checkout -- src-tauri/Cargo.lock
 
-      - name: Upload DMG (macOS)
+      - name: 上传 DMG（macOS）
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v6
         with:
@@ -239,7 +239,7 @@ jobs:
           retention-days: 3
 
       # The CLI lowercases and hyphenates Linux names, so match packages by extension.
-      - name: Upload DEB (Linux)
+      - name: 上传 DEB（Linux）
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
@@ -248,7 +248,7 @@ jobs:
           retention-days: 3
           if-no-files-found: ignore
 
-      - name: Upload AppImage (Linux)
+      - name: 上传 AppImage（Linux）
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
@@ -257,7 +257,7 @@ jobs:
           retention-days: 3
           if-no-files-found: ignore
 
-      - name: Upload RPM (Linux)
+      - name: 上传 RPM（Linux）
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
@@ -266,7 +266,7 @@ jobs:
           retention-days: 3
           if-no-files-found: ignore
 
-      - name: Upload ZST (Linux)
+      - name: 上传 ZST（Linux）
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
@@ -275,7 +275,7 @@ jobs:
           retention-days: 3
           if-no-files-found: ignore
 
-      - name: Upload MSI (Windows)
+      - name: 上传 MSI（Windows）
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
         with:
