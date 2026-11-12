@@ -222,9 +222,12 @@ jobs:
             $args += "--app-version", $env:INPUT_APP_VERSION
           }
 
-          if (-not [string]::IsNullOrEmpty($env:INPUT_INSTALLER_LANGUAGE)) {
-            $args += "--installer-language", $env:INPUT_INSTALLER_LANGUAGE
+          $installerLanguage = if ([string]::IsNullOrEmpty($env:INPUT_INSTALLER_LANGUAGE)) {
+            "zh-CN"
+          } else {
+            $env:INPUT_INSTALLER_LANGUAGE
           }
+          $args += "--installer-language", $installerLanguage
 
           if ($env:INPUT_FULLSCREEN -eq "true") {
             $args += "--fullscreen"

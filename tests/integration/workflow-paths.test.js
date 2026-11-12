@@ -152,8 +152,9 @@ describe("Workflow path integration", () => {
       expect(workflow).toContain("$buildExitCode = $LASTEXITCODE");
       expect(workflow).toContain("exit $buildExitCode");
       expect(workflow).toContain(
-        '$args += "--installer-language", $env:INPUT_INSTALLER_LANGUAGE',
+        '$args += "--installer-language", $installerLanguage',
       );
+      expect(workflow).toContain('"zh-CN"');
       expect(workflow).toContain("if-no-files-found: error");
     });
 
